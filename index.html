@@ -60,7 +60,7 @@
             mix-blend-mode: overlay;
         }
 
-        /* --- CURSOR --- */
+        /* --- CURSOR (FIXED INITIAL STATE) --- */
         .cursor-dot {
             width: 6px;
             height: 6px;
@@ -70,6 +70,10 @@
             z-index: 10000;
             pointer-events: none;
             transform: translate(-50%, -50%);
+            top: 0;
+            left: 0;
+            opacity: 0; 
+            visibility: hidden; /* HARD KILL to prevent 0,0 glitch */
         }
         .cursor-circle {
             width: 40px;
@@ -81,6 +85,10 @@
             pointer-events: none;
             transform: translate(-50%, -50%);
             transition: width 0.3s, height 0.3s, background-color 0.3s;
+            top: 0;
+            left: 0;
+            opacity: 0; 
+            visibility: hidden; /* HARD KILL to prevent 0,0 glitch */
         }
         .cursor-circle.active {
             width: 80px;
@@ -90,7 +98,7 @@
             mix-blend-mode: difference;
         }
 
-        /* --- NAV --- */
+        /* --- NAV (HIDDEN INITIALLY) --- */
         nav {
             position: fixed;
             top: 0;
@@ -102,6 +110,10 @@
             align-items: center;
             z-index: 100;
             mix-blend-mode: exclusion;
+            
+            /* HIDE NAV INITIALLY TO PREVENT DOUBLE HEADER */
+            opacity: 0;
+            transform: translateY(-20px);
         }
 
         .nav-logo {
@@ -329,58 +341,138 @@
             font-style: italic;
         }
 
-        /* RESERVATION */
+        /* RESERVATION - REFINED PRO SCALE */
         .reservation {
-            height: 80vh;
+            height: auto; /* Allow content to dictate, padded heavily */
+            padding: 120px 0; /* Pro-tier spacing: Elegant verticality */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: #080808;
+            background: #050505;
             text-align: center;
-            border-top: 1px solid #222;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
             scroll-margin-top: 0;
+            position: relative;
+            z-index: 5;
+        }
+
+        .res-label {
+            margin-bottom: 30px; /* Tighter association */
+            opacity: 0.6;
+            font-size: 10px;
+            letter-spacing: 0.3em;
         }
 
         .res-title {
-            font-size: 6vw;
-            margin-bottom: 3rem;
+            font-size: 4vw; /* Sophisticated scale, not shouting */
+            line-height: 1.1;
+            margin-bottom: 0;
             color: var(--text-light);
+            letter-spacing: -0.01em; 
             max-width: 60vw;
-            line-height: 1;
         }
 
         .res-btn {
-            background: transparent;
-            border: 1px solid var(--gold);
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.4);
             color: var(--gold);
-            padding: 20px 60px;
+            padding: 18px 50px; /* Refined button size */
             font-family: 'Syncopate';
-            font-size: 12px;
-            letter-spacing: 3px;
-            transition: all 0.4s ease;
+            font-size: 11px;
+            letter-spacing: 2px;
+            transition: all 0.4s cubic-bezier(0.215, 0.610, 0.355, 1);
             position: relative;
             overflow: hidden;
             text-transform: uppercase;
+            margin-top: 50px; 
+            backdrop-filter: blur(5px);
         }
-        .res-btn:hover { background: var(--gold); color: #000; box-shadow: 0 0 30px rgba(212,175,55,0.3); }
+        .res-btn:hover { 
+            background: var(--gold); 
+            color: #000; 
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(212,175,55,0.2); 
+        }
 
-        /* FOOTER */
+        /* PRO FOOTER ARCHITECTURE - REFINED */
         footer {
-            background: #000;
-            padding: 80px 50px;
-            border-top: 1px solid #222;
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            font-family: 'Syncopate', sans-serif;
-            font-size: 11px;
-            color: #666;
-            line-height: 2;
+            background: linear-gradient(180deg, #080808 0%, #000 100%);
+            display: flex;
+            flex-direction: column;
+            border-top: 1px solid rgba(212, 175, 55, 0.1); 
+            position: relative;
+            z-index: 5;
         }
-        
-        .f-col h4 { color: #fff; margin-bottom: 20px; letter-spacing: 0.2em; }
-        .f-socials a { color: #666; text-decoration: none; margin-right: 20px; transition: color 0.3s; }
-        .f-socials a:hover { color: var(--gold); }
+
+        .footer-hero {
+            padding: 80px 5vw 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .f-address {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 18px; /* Discrete, high-end sizing */
+            color: #999;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+        .f-address span { color: var(--gold); opacity: 0.8; }
+
+        .f-hours {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            color: #444;
+            text-transform: uppercase;
+        }
+
+        .footer-bar {
+            background: #000;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #111;
+        }
+
+        .f-legal {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 9px;
+            color: #222;
+            letter-spacing: 0.1em;
+        }
+
+        .f-socials {
+            display: flex;
+            gap: 40px;
+        }
+
+        .social-icon {
+            width: 18px; /* Smaller icons for elegance */
+            height: 18px;
+            fill: #333;
+            transition: fill 0.3s ease;
+        }
+        .social-icon:hover { fill: var(--gold); }
+
+        /* MOBILE RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 18vw; }
+            .res-title { font-size: 8vw; }
+            .f-address { font-size: 16px; }
+            .footer-bar { flex-direction: column-reverse; gap: 30px; padding-bottom: 40px; }
+            .gallery-track { padding: 0 5vw; }
+            .gallery-img { width: 70vw; height: 90vw; }
+            .quote-block { width: 70vw; font-size: 6vw; }
+            .res-btn { padding: 16px 40px; width: auto; }
+            nav { padding: 20px; }
+            .nav-links { display: none; } 
+        }
 
         /* PRELOADER */
         .preloader {
@@ -572,8 +664,8 @@
                     </div>
                     <!-- Architecture / Desert Mood (Keep as is) -->
                     <img src="https://images.unsplash.com/photo-1451976426598-a7593bd6d0b2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="gallery-img" alt="Desert Night">
-                    <!-- Option 3: Blue agave plants hillside -->
-<img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="gallery-img" alt="Agave">
+                    <!-- Option 3: Blue agave plants hillside (Verified Fix) -->
+                    <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="gallery-img" alt="Agave">
                     <!-- Dark Interior / Bottle (Keep as is) -->
                     <img src="https://images.unsplash.com/photo-1572116469696-31de0f17cc34?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="gallery-img" alt="Shadows">
                     <!-- Fire/Cooking (Keep as is) -->
@@ -585,30 +677,31 @@
                 </div>
             </section>
 
-            <!-- RESERVATION -->
+            <!-- RESERVATION UPGRADE -->
             <section class="reservation" id="reserve">
-                <div class="sync gold" style="margin-bottom:20px;">ACCESS</div>
-                <h2 class="res-title italic">Claim Your Seat At The Fire</h2>
+                <div class="sync gold res-label">ACCESS</div>
+                <h2 class="res-title italic">Claim Your Seat<br>At The Fire</h2>
                 <button class="res-btn">Reserve Table</button>
             </section>
 
-            <!-- FOOTER -->
+            <!-- FOOTER UPGRADE -->
             <footer>
-                <div class="f-col">
-                    <h4>Location</h4>
-                    <p>4420 N. Camelback Rd<br>Phoenix, AZ 85018</p>
-                </div>
-                <div class="f-col">
-                    <h4>Hours</h4>
-                    <p>Wed — Sun<br>6pm — 2am</p>
-                </div>
-                <div class="f-col">
-                    <h4>Social</h4>
-                    <div class="f-socials">
-                        <a href="#">INSTAGRAM</a>
-                        <a href="#">RESY</a>
+                <div class="footer-hero">
+                    <div class="f-address">
+                        4420 N. Camelback Rd<br>
+                        <span>Phoenix</span>, AZ 85018
                     </div>
-                    <p style="margin-top:20px; font-size:9px; color:#333;">© 2026 SANGRE DE SOL</p>
+                    <div class="f-hours">Wed — Sun / 6pm — 2am</div>
+                </div>
+                
+                <div class="footer-bar">
+                    <div class="f-legal">© 2026 SANGRE DE SOL</div>
+                    <div class="f-socials">
+                        <!-- Instagram SVG -->
+                        <a href="#"><svg class="social-icon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                        <!-- Generic Resy/Calendar SVG -->
+                        <a href="#"><svg class="social-icon" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/></svg></a>
+                    </div>
                 </div>
             </footer>
 
@@ -627,8 +720,19 @@
         // --- 1. CURSOR LOGIC ---
         const cursorDot = document.querySelector('.cursor-dot');
         const cursorCircle = document.querySelector('.cursor-circle');
-        
+        let hasMoved = false;
+
         window.addEventListener('mousemove', (e) => {
+            // First time move: fade in the cursor
+            if (!hasMoved) {
+                // Ensure visibility is 'visible' before animating opacity
+                cursorDot.style.visibility = "visible";
+                cursorCircle.style.visibility = "visible";
+                
+                gsap.to([cursorDot, cursorCircle], { opacity: 1, duration: 0.5 });
+                hasMoved = true;
+            }
+
             gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0.1 });
             gsap.to(cursorCircle, { x: e.clientX, y: e.clientY, duration: 0.3, ease: 'power2.out' });
         });
@@ -792,6 +896,8 @@
         const tl = gsap.timeline();
         tl.to('.loader-line', { width: '100%', duration: 1.5, ease: 'power2.inOut' })
           .to('.preloader', { y: '-100%', duration: 1, ease: 'expo.inOut' })
+          // ANIMATE NAV IN AFTER PRELOADER IS GONE
+          .to('nav', { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }, "-=0.2")
           .from('.hero-title span', { y: 150, stagger: 0.1, duration: 1.5, ease: 'power4.out' }, "-=0.5")
           .from('.hero-sub', { opacity: 0, duration: 1 }, "-=1");
 
